@@ -1,0 +1,23 @@
+{
+  "name": "resource-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rhinobird-io/resource-plugin.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rhinobird-io/resource-plugin/issues"
+  },
+  "homepage": "https://github.com/rhinobird-io/resource-plugin",
+  "devDependencies": {
+    "mongoose": "^4.0.5",
+    "restify": "^3.0.3"
+  }
+}
