@@ -38,17 +38,25 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 //
-//var resource01 = new Resource({name: "Laptop At 17 floor"});
+//var resource01 = new Resource({name: "Laptop At 17 floor 01"});
 //resource01.save(function (err, resource){
 //
 //    var booking01 = new ResourceBooking();
 //    booking01.fromTime = new Date();
-//    booking01.toTime = new Date(booking01.fromTime.getTime() + 30 * 60 * 1000);
+//    booking01.toTime = new Date(booking01.fromTime.getTime() + 120 * 60 * 1000);
 //    booking01.userId = 40;
 //    booking01.resource = resource;
 //    booking01.save();
 //
+//
+//    var booking02 = new ResourceBooking();
+//    booking02.fromTime = new Date(booking01.fromTime.getTime() + 160 * 60 * 1000);
+//    booking02.toTime = new Date(booking02.fromTime.getTime() + 100 * 60 * 1000);
+//    booking02.userId = 40;
+//    booking02.resource = resource;
+//    booking02.save();
 //    resource01.resourceBookings.push(booking01);
+//    resource01.resourceBookings.push(booking02);
 //    resource01.save();
 //});
 function getResourceById(req, res, next) {
