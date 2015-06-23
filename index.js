@@ -91,7 +91,9 @@ function bookResource(req, res, next) {
         resourceBooking.save();
         resource.resourceBookings.push(resourceBooking);
         resource.save(function() {
-            res.send(200, resourceBooking);
+            Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
+                return res.send(doc);
+            });
         });
     });
 
