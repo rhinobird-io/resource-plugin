@@ -76,29 +76,6 @@ function getResources(req, res, next) {
     });
 }
 
-function bookResource(req, res, next) {
-    var id = req.params.id;
-    var userId = req.headers['x-user'];
-    var fromTime = Date.parse(req.params.fromTime);
-    var toTime = Date.parse(req.params.toTime);
-    var resourceBooking = new ResourceBooking();
-
-    Resource.findById(id, function (err, resource) {
-        resourceBooking.userId = parseInt(userId);
-        resourceBooking.fromTime = fromTime;
-        resourceBooking.toTime = toTime;
-        resourceBooking.resource = resource;
-        resourceBooking.save();
-        resource.resourceBookings.push(resourceBooking);
-        resource.save(function() {
-            Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
-                return res.send(doc);
-            });
-        });
-    });
-
-    return next();
-}
 
 function postResources(req, res, next) {
     var resource = new Resource();
@@ -124,11 +101,52 @@ function deleteResourceBook(req, res, next) {
     return next();
 }
 
+
+function bookResource(req, res, next) {
+    var id = req.params.id;
+    var userId = req.headers['x-user'];
+    var fromTime = Date.parse(req.params.fromTime);
+    var toTime = Date.parse(req.params.toTime);
+    var resourceBooking = new ResourceBooking();
+
+    Resource.findById(id, function (err, resource) {
+        resourceBooking.userId = parseInt(userId);
+        resourceBooking.fromTime = fromTime;
+        resourceBooking.toTime = toTime;
+        resourceBooking.resource = resource;
+        resourceBooking.save();
+        resource.resourceBookings.push(resourceBooking);
+        resource.save(function() {
+            Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
+                return res.send(doc);
+            });
+        });
+    });
+
+    return next();
+}
+
+function updateResourceBook(req, res, next) {
+    var id = req.params.id;
+    var bookId = req.params.bookId;
+
+    ResourceBooking.findById(bookId, function(err, data) {
+        var resourceBooking = data;
+        resourceBooking.fromTime = Date.parse(req.params.fromTime);
+        resourceBooking.toTime = Date.parse(req.params.toTime);
+        resourceBooking.save(function(err) {
+            res.send(resourceBooking);
+        });
+    });
+    return next();
+}
+
 server.get('/resources', getResources);
 server.get('/resources/:id', getResourceById);
 server.del('/resources/:id/book/:bookId', deleteResourceBook);
 server.post('/resources/:id/book/:fromTime/:toTime', bookResource)
 server.post('/resources', postResources);
+server.put('/resources/:id/book/:bookId/:fromTime/:toTime', updateResourceBook);
 
 var port = process.env.PORT || 6100;
 server.listen(port, function () {
