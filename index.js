@@ -8,6 +8,8 @@ var ResourceSchema = new Schema({
     name: String,
     category: String,
     description: String,
+    location: String,
+    images: [String],
     resourceBookings: [
         {type: ObjectId, ref: 'ResourceBooking'}
     ]
@@ -37,7 +39,7 @@ var server = restify.createServer({
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
-//
+
 //var resource01 = new Resource({name: "Laptop At 17 floor 01"});
 //resource01.save(function (err, resource){
 //
@@ -79,9 +81,17 @@ function getResources(req, res, next) {
 
 function postResources(req, res, next) {
     var resource = new Resource();
-    resource.title = "Hello";
+    var postResource = req.body.resource;
+    if (!postResource){
+        res.send(404);
+        return next();
+    }
+    resource.name = postResource.name;
+    resource.description = postResource.description;
+    resource.location = postResource.location;
+    resource.images = postResource.images;
     resource.save(function () {
-        res.send(req.body);
+        res.send(resource._id);
     });
     return next();
 }
