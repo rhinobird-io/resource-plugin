@@ -95,7 +95,21 @@ function postResources(req, res, next) {
     });
     return next();
 }
+function deleteResource(req, res, next) {
+    var id = req.params.id;
 
+    Resource.findById(id).populate('resourceBookings').exec(function (err, doc) {
+        if (!err) {
+            doc.remove(function () {
+                Resource.findById(id).remove(function () {
+                    return res.send(200);
+                });
+            });
+        }
+    });
+
+    return next();
+}
 function deleteResourceBook(req, res, next) {
     var id = req.params.id;
     var bookId = req.params.bookId;
@@ -157,6 +171,7 @@ server.del('/resources/:id/book/:bookId', deleteResourceBook);
 server.post('/resources/:id/book/:fromTime/:toTime', bookResource)
 server.post('/resources', postResources);
 server.put('/resources/:id/book/:bookId/:fromTime/:toTime', updateResourceBook);
+server.del('/resources/:id', deleteResource);
 
 var port = process.env.PORT || 6100;
 server.listen(port, function () {
