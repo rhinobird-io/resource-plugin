@@ -91,7 +91,25 @@ function postResources(req, res, next) {
     resource.location = postResource.location;
     resource.images = postResource.images;
     resource.save(function () {
-        res.send(resource._id);
+        res.send(resource);
+    });
+    return next();
+}
+function updateResource(req, res, next) {
+    var postResource = req.body.resource;
+    if (!postResource){
+        res.send(404);
+        return next();
+    }
+    Resource.findById(postResource._id, function(err, data) {
+        var resource = data;
+        resource.name = postResource.name;
+        resource.description = postResource.description;
+        resource.location = postResource.location;
+        resource.images = postResource.images;
+        resource.save(function () {
+            res.send(resource);
+        });
     });
     return next();
 }
@@ -171,6 +189,7 @@ server.del('/resources/:id/book/:bookId', deleteResourceBook);
 server.post('/resources/:id/book/:fromTime/:toTime', bookResource)
 server.post('/resources', postResources);
 server.put('/resources/:id/book/:bookId/:fromTime/:toTime', updateResourceBook);
+server.put('/resources', updateResource);
 server.del('/resources/:id', deleteResource);
 
 var port = process.env.PORT || 6100;
