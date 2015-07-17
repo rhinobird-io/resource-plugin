@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
-
 var ResourceSchema = new Schema({
     name: String,
     category: String,
@@ -29,7 +28,7 @@ var ResourceBookingSchema = new Schema({
 
 var ResourceBooking = mongoose.model('ResourceBooking', ResourceBookingSchema);
 
-mongoose.connect('mongodb://localhost/resource');
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost/resource');
 
 var server = restify.createServer({
     name: 'ResourcePlugin',
