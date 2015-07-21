@@ -16,7 +16,7 @@
     "url": "https://github.com/rhinobird-io/resource-plugin/issues"
   },
   "homepage": "https://github.com/rhinobird-io/resource-plugin",
-  "devDependencies": {
+  "dependencies": {
     "mongoose": "^4.0.5",
     "restify": "^3.0.3"
   }
