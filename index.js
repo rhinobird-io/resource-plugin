@@ -28,7 +28,7 @@ var ResourceBookingSchema = new Schema({
 
 var ResourceBooking = mongoose.model('ResourceBooking', ResourceBookingSchema);
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost/resource');
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/resource');
 
 var server = restify.createServer({
     name: 'ResourcePlugin',
