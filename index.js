@@ -163,19 +163,6 @@ function bookResource(req, res, next) {
             res.send(404);
         }
     });
-    //Resource.findById(id, function (err, resource) {
-    //    resourceBooking.userId = parseInt(userId);
-    //    resourceBooking.fromTime = fromTime;
-    //    resourceBooking.toTime = toTime;
-    //    resourceBooking.resource = resource;
-    //    resourceBooking.save();
-    //    resource.resourceBookings.push(resourceBooking);
-    //    resource.save(function() {
-    //        Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
-    //            return res.send(doc);
-    //        });
-    //    });
-    //});
 
     return next();
 }
@@ -183,13 +170,12 @@ function bookResource(req, res, next) {
 function updateResourceBook(req, res, next) {
     var id = req.params.id;
     var bookId = req.params.bookId;
-
-    ResourceBooking.findById(bookId, function(err, data) {
-        var resourceBooking = data;
-        resourceBooking.fromTime = Date.parse(req.params.fromTime);
-        resourceBooking.toTime = Date.parse(req.params.toTime);
-        resourceBooking.save(function(err) {
-            res.send(resourceBooking);
+    ResourceBookings.update({
+        fromTime: Date.parse(req.params.fromTime),
+        toTime: Date.parse(req.params.toTime)
+    }, { where: {id: bookId} }).then(function() {
+        ResourceBookings.findById(bookId).then(function(booking) {
+            res.send(booking);
         });
     });
     return next();
