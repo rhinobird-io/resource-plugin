@@ -113,27 +113,18 @@ function updateResource(req, res, next) {
 function deleteResource(req, res, next) {
     var id = req.params.id;
 
-    Resource.findById(id).populate('resourceBookings').exec(function (err, doc) {
-        if (!err) {
-            doc.remove(function () {
-                Resource.findById(id).remove(function () {
-                    return res.send(200);
-                });
-            });
-        }
+    Resources.destroy({ where: {id: id} }).then(function() {
+        res.send(200);
     });
 
     return next();
 }
 
 function deleteResourceBook(req, res, next) {
-    var id = req.params.id;
     var bookId = req.params.bookId;
 
-    ResourceBooking.findById(bookId).remove(function () {
-        Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
-            return res.send(doc);
-        });
+    ResourceBookings.destroy({ where: {id: bookId} }).then(function() {
+        res.send(200);
     });
 
     return next();
@@ -184,7 +175,7 @@ function updateResourceBook(req, res, next) {
 server.get('/resources', getResources);
 server.get('/resources/:id', getResourceById);
 server.del('/resources/:id/book/:bookId', deleteResourceBook);
-server.post('/resources/:id/book/:fromTime/:toTime', bookResource)
+server.post('/resources/:id/book/:fromTime/:toTime', bookResource);
 server.post('/resources', addResource);
 server.put('/resources/:id/book/:bookId/:fromTime/:toTime', updateResourceBook);
 server.put('/resources', updateResource);

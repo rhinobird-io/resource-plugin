@@ -19,7 +19,8 @@ module.exports = {
         type: DataTypes.INTEGER,
         references: {
           model: "Resources",
-          key: "id"
+          key: "id",
+          onDelete: "cascade"
         }
       },
       userId: {
