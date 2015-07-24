@@ -77,10 +77,12 @@ function getResources(req, res, next) {
 function addResource(req, res, next) {
     var resource = req.body.resource;
     var name = resource.name;
+    var images = resource.images;
     var location = resource.location;
     var description = resource.description;
     Resources.create({
         name: name,
+        images: images,
         location: location,
         description: description
     }).then(function(result) {
@@ -92,20 +94,18 @@ function addResource(req, res, next) {
 }
 
 function updateResource(req, res, next) {
-    var postResource = req.body.resource;
-    if (!postResource){
+    var resource = req.body.resource;
+    if (!resource){
         res.send(404);
         return next();
     }
-    Resource.findById(postResource._id, function(err, data) {
-        var resource = data;
-        resource.name = postResource.name;
-        resource.description = postResource.description;
-        resource.location = postResource.location;
-        resource.images = postResource.images;
-        resource.save(function () {
-            res.send(resource);
-        });
+    Resources.update({
+        name: resource.name,
+        images: resource.images,
+        location: resource.location,
+        description: resource.description
+    }, { where: {id: resource.id} }).then(function(result) {
+        res.send(resource);
     });
     return next();
 }
