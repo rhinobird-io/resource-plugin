@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: function (migration, DataTypes, done) {
-    migration.createTable('Resources', {
+  up: function (migration, DataTypes) {
+    return migration.createTable('Resources', {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -19,7 +19,7 @@ module.exports = {
         type: DataTypes.STRING
       },
       images: {
-        type: DataTypes.ARRAY(DataTypes.DECIMAL)
+        type: DataTypes.ARRAY(DataTypes.STRING)
       },
       createdAt: {
         type: DataTypes.DATE
@@ -31,6 +31,6 @@ module.exports = {
   },
 
   down: function (migration, DataTypes) {
-    migration.dropTable("Resources");
+    return migration.dropTable("Resources");
   }
 };

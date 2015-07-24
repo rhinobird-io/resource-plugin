@@ -56,11 +56,7 @@ function getResourceById(req, res, next) {
 function getResources(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    // .find() without any arguments, will return all results
-    // the `-1` in .sort() means descending order
-    //Resource.find().lean().populate('resourceBookings').exec(function (err, data) {
-    //    return res.send(data);
-    //});
+
     Resources.findAll().then(function(result) {
        return res.send(result);
     }).catch(function(err) {
@@ -103,6 +99,7 @@ function updateResource(req, res, next) {
     });
     return next();
 }
+
 function deleteResource(req, res, next) {
     var id = req.params.id;
 
@@ -118,6 +115,7 @@ function deleteResource(req, res, next) {
 
     return next();
 }
+
 function deleteResourceBook(req, res, next) {
     var id = req.params.id;
     var bookId = req.params.bookId;
