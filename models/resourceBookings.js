@@ -4,8 +4,10 @@ module.exports = function (sequelize, DataTypes) {
     var ResourceBookings = sequelize.define("ResourceBookings", {
         resourceId: {
             type: DataTypes.INTEGER,
-            references: "Resources",
-            referencesKey: "id"
+            references: {
+                model: "Resources",
+                key: "id"
+            }
         },
         userId: {
             type: DataTypes.STRING

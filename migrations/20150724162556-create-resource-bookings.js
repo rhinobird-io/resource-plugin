@@ -16,7 +16,11 @@ module.exports = {
         primaryKey: true
       },
       resourceId: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Resources",
+          key: "id"
+        }
       },
       userId: {
         type: DataTypes.STRING
@@ -25,6 +29,14 @@ module.exports = {
         type: DataTypes.DATE
       },
       toTime: {
+        type: DataTypes.DATE
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        allowNull: false,
         type: DataTypes.DATE
       }
     });

@@ -5,6 +5,7 @@ var ObjectId = Schema.Types.ObjectId;
 var models = require('./models');
 var Sequelize = models.sequelize;
 var Resources = models.Resources;
+var ResourceBookings = models.ResourceBookings;
 
 var ResourceSchema = new Schema({
     name: String,
@@ -44,9 +45,18 @@ server.use(restify.bodyParser());
 
 function getResourceById(req, res, next) {
     var id = req.params.id;
+    var userId = req.headers['x-user'];
     Resources.findById(id).then(function(result) {
         if (result) {
-            res.send(result.dataValues);
+            var resource = result.dataValues;
+            var resourceBookings = [];
+            ResourceBookings.findAll({where: {resourceId: id, userId: userId}}).then(function(bookings) {
+                bookings.forEach(function(booking) {
+                    resourceBookings.push(booking.dataValues);
+                });
+                resource.resourceBookings = resourceBookings;
+                res.send(result.dataValues);
+            });
         } else {
             res.send(404);
         }
@@ -120,8 +130,6 @@ function deleteResourceBook(req, res, next) {
     var id = req.params.id;
     var bookId = req.params.bookId;
 
-    console.log(id);
-    console.log(bookId);
     ResourceBooking.findById(bookId).remove(function () {
         Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
             return res.send(doc);
@@ -137,21 +145,37 @@ function bookResource(req, res, next) {
     var userId = req.headers['x-user'];
     var fromTime = Date.parse(req.params.fromTime);
     var toTime = Date.parse(req.params.toTime);
-    var resourceBooking = new ResourceBooking();
-
-    Resource.findById(id, function (err, resource) {
-        resourceBooking.userId = parseInt(userId);
-        resourceBooking.fromTime = fromTime;
-        resourceBooking.toTime = toTime;
-        resourceBooking.resource = resource;
-        resourceBooking.save();
-        resource.resourceBookings.push(resourceBooking);
-        resource.save(function() {
-            Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
-                return res.send(doc);
+    Resources.findById(parseInt(id)).then(function(result) {
+        if (result) {
+            var resource = result.dataValues;
+            ResourceBookings.create({
+                resourceId: resource.id,
+                userId: userId,
+                fromTime: fromTime,
+                toTime: toTime
+            }).then(function(result) {
+                res.send(result.dataValues);
+            }).catch(function(err) {
+                console.error(err);
+                res.send(500);
             });
-        });
+        } else {
+            res.send(404);
+        }
     });
+    //Resource.findById(id, function (err, resource) {
+    //    resourceBooking.userId = parseInt(userId);
+    //    resourceBooking.fromTime = fromTime;
+    //    resourceBooking.toTime = toTime;
+    //    resourceBooking.resource = resource;
+    //    resourceBooking.save();
+    //    resource.resourceBookings.push(resourceBooking);
+    //    resource.save(function() {
+    //        Resource.findById(id).populate('resourceBookings').exec(function(err, doc) {
+    //            return res.send(doc);
+    //        });
+    //    });
+    //});
 
     return next();
 }
