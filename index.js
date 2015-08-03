@@ -1,30 +1,8 @@
 var restify = require('restify');
-var ObjectId = Schema.Types.ObjectId;
 var models = require('./models');
 var Sequelize = models.sequelize;
 var Resources = models.Resources;
 var ResourceBookings = models.ResourceBookings;
-
-var ResourceSchema = new Schema({
-    name: String,
-    category: String,
-    description: String,
-    location: String,
-    images: [String],
-    resourceBookings: [
-        {type: ObjectId, ref: 'ResourceBooking'}
-    ]
-});
-
-var ResourceBookingSchema = new Schema({
-    userId: Schema.Types.Number,
-    fromTime: Schema.Types.Date,
-    toTime: Schema.Types.Date,
-    resource: {
-        type: ObjectId,
-        ref: 'Resource'
-    }
-});
 
 var server = restify.createServer({
     name: 'ResourcePlugin',
