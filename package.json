@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/rhinobird-io/resource-plugin",
   "dependencies": {
-    "mongoose": "^4.0.5",
     "pg": "^4.4.0",
     "pg-hstore": "^2.3.2",
     "restify": "^3.0.3",

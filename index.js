@@ -1,6 +1,4 @@
 var restify = require('restify');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 var models = require('./models');
 var Sequelize = models.sequelize;
@@ -18,8 +16,6 @@ var ResourceSchema = new Schema({
     ]
 });
 
-var Resource = mongoose.model('Resource', ResourceSchema);
-
 var ResourceBookingSchema = new Schema({
     userId: Schema.Types.Number,
     fromTime: Schema.Types.Date,
@@ -29,10 +25,6 @@ var ResourceBookingSchema = new Schema({
         ref: 'Resource'
     }
 });
-
-var ResourceBooking = mongoose.model('ResourceBooking', ResourceBookingSchema);
-
-mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/resource');
 
 var server = restify.createServer({
     name: 'ResourcePlugin',

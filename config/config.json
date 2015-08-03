@@ -10,7 +10,7 @@
   "docker_development93": {
     "username": "postgres",
     "password": "123456",
-    "database": "im",
+    "database": "resource",
     "host": "127.0.0.1",
     "port": "35432",
     "dialect": "postgres"
