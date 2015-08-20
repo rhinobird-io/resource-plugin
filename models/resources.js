@@ -14,6 +14,9 @@ module.exports = function (sequelize, DataTypes) {
     },
     location: {
       type: DataTypes.STRING
+    },
+    userId: {
+      type: DataTypes.INTEGER
     }
   });
   return Resources;

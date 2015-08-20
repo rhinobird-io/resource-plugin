@@ -50,16 +50,21 @@ function addResource(req, res, next) {
     var images = resource.images;
     var location = resource.location;
     var description = resource.description;
+    var userId = resource.userId;
     Resources.create({
         name: name,
         images: images,
         location: location,
-        description: description
+        description: description,
+        userId: userId
     }).then(function(result) {
         res.send(result.dataValues);
     }).catch(function(err) {
         console.error(err);
-        res.send(500);
+        if (err.name === 'SequelizeUniqueConstraintError')
+            res.send(403);
+        else
+            res.send(500);
     });
 }
 
@@ -76,6 +81,12 @@ function updateResource(req, res, next) {
         description: resource.description
     }, { where: {id: resource.id} }).then(function(result) {
         res.send(resource);
+    }).catch(function (err) {
+        console.error(err);
+        if (err.name === 'SequelizeUniqueConstraintError')
+            res.send(403);
+        else
+            res.send(500);
     });
     return next();
 }

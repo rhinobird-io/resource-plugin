@@ -8,6 +8,9 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
+      userId: {
+        type: DataTypes.INTEGER
+      },
       name: {
         type: DataTypes.STRING,
         unique: true
