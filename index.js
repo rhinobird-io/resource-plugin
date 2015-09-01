@@ -20,7 +20,7 @@ function getResourceById(req, res, next) {
         if (result) {
             var resource = result.dataValues;
             var resourceBookings = [];
-            ResourceBookings.findAll({where: {resourceId: id, userId: userId}}).then(function(bookings) {
+            ResourceBookings.findAll({where: {resourceId: id}}).then(function(bookings) {
                 bookings.forEach(function(booking) {
                     resourceBookings.push(booking.dataValues);
                 });
@@ -38,7 +38,7 @@ function getResources(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     Resources.findAll().then(function(result) {
-       return res.send(result);
+        return res.send(result);
     }).catch(function(err) {
         console.log(err);
     });
