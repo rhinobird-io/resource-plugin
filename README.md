@@ -1,3 +1,6 @@
 # resource-plugin
-npm install
-node index.js
+
+```bash
+$ npm install
+$ node index.js
+```
